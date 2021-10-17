@@ -1,14 +1,52 @@
-.restaurant {
+.restaurant-card {
   box-shadow: 0.5rem 0.5rem 1rem 0.3rem lightgray;
   margin: 1rem;
   margin-bottom: 3rem;
   padding: 1rem;
 }
 
-.description {
+.restaurant-description {
   margin-bottom: 2rem;
 }
 
 .restaurant-name {
   margin-top: 0.5rem;
+}
+
+@media only screen and (min-width: 30rem) {
+  .restaurant-card {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+      "img text"
+      "btn null";
+    grid-gap: 1rem;
+  }
+
+  .restaurant-img {
+    grid-area: img;
+  }
+  .restaurant-text {
+    grid-area: text;
+  }
+  .restaurant-btn {
+    grid-area: btn;
+  }
+  .restaurant-name {
+    margin-top: 0;
+  }
+  .restaurant-description {
+    margin: 0;
+  }
+}
+
+@media only screen and (min-width: 40rem) {
+  .restaurant-card {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas:
+      "img   text text"
+      "null1 btn  null2";
+    grid-gap: 1.5rem;
+  }
 }

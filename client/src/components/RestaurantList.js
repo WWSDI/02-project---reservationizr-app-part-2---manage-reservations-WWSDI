@@ -17,10 +17,11 @@ const RestaurantList = () => {
       <h1>Restaurants</h1>
       {restaurants.map(({ id, image: imgURL, name, description }) => {
         return (
-          <div key={id}>
+          <div key={id} className="restaurant">
             <img src={imgURL} alt="restaurant"></img>
-            <h2>{name}</h2>
-            <div>{description}</div>
+            <h2 className="restaurant-name">{name}</h2>
+            <p className="description">{description}</p>
+            <div className="btn">Reserve now →</div>
           </div>
         );
       })}

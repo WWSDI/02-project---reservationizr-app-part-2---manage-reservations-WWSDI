@@ -1,0 +1,14 @@
+.restaurant {
+  box-shadow: 0.5rem 0.5rem 1rem 0.3rem lightgray;
+  margin: 1rem;
+  margin-bottom: 3rem;
+  padding: 1rem;
+}
+
+.description {
+  margin-bottom: 2rem;
+}
+
+.restaurant-name {
+  margin-top: 0.5rem;
+}

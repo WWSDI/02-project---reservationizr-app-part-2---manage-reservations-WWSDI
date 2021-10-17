@@ -8,7 +8,7 @@ app.use(express.json());
 
 app.get("/restaurants", async (req, res) => {
   const allRestaurants = await RestaurantModel.find({});
-  console.log("😱",allRestaurants)
+  console.log("😱", allRestaurants);
   res.status(200).send(allRestaurants);
 });
 

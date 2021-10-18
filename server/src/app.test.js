@@ -38,8 +38,9 @@ describe("app", () => {
     });
   });
 
-  // 3 status code: 200, 400, 404
+  // ✅ 3 status code: 200, 400, 404
   describe("get a single restaurant route", () => {
+    // Happy path
     test("should return a single restaurant", async () => {
       const thaiIsaan = {
         name: "Thai Isaan",
@@ -56,11 +57,27 @@ describe("app", () => {
           expect(res.body).toEqual(thaiIsaan);
         });
     });
-    test("");
+    test("return 400 error code when given an invalid id", async () => {
+      await request(app)
+        .get("/restaurants/bad-id")
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({ message: "id is invalid" });
+        });
+    });
+    test("return 404 error code when given a valid but non-existent id", async () => {
+      const nonexistentValidId = "616005e26d59890f8f100000";
+      await request(app)
+        .get(`/restaurants/${nonexistentValidId}`)
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toEqual({ message: "id does not exist" });
+        });
+    });
   });
 
   // 2 status code: 200, 401
-  describe("get all reservations route", () => {});
+  describe.only("get all reservations route", () => {});
 
   // 5 status code: 200, 400, 401, 403, 404
   describe("get a single reservation route", () => {});

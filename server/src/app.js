@@ -6,6 +6,7 @@ const { celebrate, Joi, errors, Segments } = require("celebrate");
 const app = express();
 const jwt = require("express-jwt");
 const jwks = require("jwks-rsa");
+const { isValidObjectId } = require("mongoose");
 const jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
     cache: true,
@@ -30,9 +31,18 @@ app.get("/restaurants", async (req, res) => {
 // 3 status code: 200, 400, 404
 app.get("/restaurants/:id", async (req, res) => {
   const { id } = req.params;
-  const foundRestaurant = await RestaurantModel.findById(id);
-  console.log("✅foundRestaurant", foundRestaurant);
-  res.status(200).send(foundRestaurant);
+  try {
+    const foundRestaurant = await RestaurantModel.findById(id);
+    if (!foundRestaurant) throw new Error("Restaurant NOT FOUND!");
+    // console.log("✅foundRestaurant", foundRestaurant);
+    res.status(200).send(foundRestaurant);
+  } catch (err) {
+    if (!isValidObjectId(id)) {
+      res.status(400).send({ message: "id is invalid" });
+    } else {
+      res.status(404).send({ message: "id does not exist" });
+    }
+  }
 });
 
 // 2 status code: 200, 401

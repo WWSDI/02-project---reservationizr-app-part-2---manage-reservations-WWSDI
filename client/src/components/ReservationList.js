@@ -21,6 +21,18 @@ const ReservationList = () => {
     })();
   }, [getAccessTokenSilently]);
 
+  if (reservations.length === 0) {
+    return (
+      <>
+        <h1>Upcoming reservations</h1>
+        <p>You don't have any reservations.</p>
+        <Link className="reservation-link" to="/">
+          View the restaurants
+        </Link>
+      </>
+    );
+  }
+
   return (
     <>
       <h1>Upcoming reservations</h1>

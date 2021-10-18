@@ -13,8 +13,6 @@ const Reservation = () => {
   useEffect(() => {
     (async () => {
       const accessToken = await getAccessTokenSilently();
-
-      console.log("accessToken", accessToken);
       const response = await fetch(`http://localhost:5000/reservations/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -28,8 +26,7 @@ const Reservation = () => {
   return (
     <>
       <h1>{restaurantName}</h1>
-      <p>{date}</p>
-      <p>{formatDate(date)}</p>
+      <p>{date ? formatDate(date) : date}</p>
       <p>
         <strong>Party size: </strong>
         {partySize}

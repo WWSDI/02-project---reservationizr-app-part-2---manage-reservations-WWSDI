@@ -2,7 +2,6 @@ import "./ReservationList.css";
 import { formatDate } from "../utils/formatDate";
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import Reservation from "./Reservation";
 import { Link } from "react-router-dom";
 
 const ReservationList = () => {
@@ -12,7 +11,6 @@ const ReservationList = () => {
   useEffect(() => {
     (async () => {
       const accessToken = await getAccessTokenSilently();
-      // console.log("ACCESSTOKEN", accessToken);
       const response = await fetch("http://localhost:5000/reservations", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -31,7 +29,6 @@ const ReservationList = () => {
           <div key={reservation.id}>
             <h2>{reservation.restaurantName}</h2>
             <p>{formatDate(reservation.date)}</p>
-            {/* <Reservation reservation={reservation} /> */}
             <Link to={`/reservations/${reservation.id}`}>View details →</Link>
           </div>
         );

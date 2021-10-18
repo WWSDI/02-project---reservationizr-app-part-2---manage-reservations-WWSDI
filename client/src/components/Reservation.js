@@ -9,6 +9,7 @@ const Reservation = () => {
   const { restaurantName, date, partySize } = reservation;
   const { id } = useParams();
   const { getAccessTokenSilently } = useAuth0();
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -18,10 +19,32 @@ const Reservation = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      const data = await response.json();
-      setReservation(data);
+      if (response.ok) {
+        const data = await response.json();
+        setReservation(data);
+      } else if (response.status === 404) {
+        console.log("NOT FOUND 404");
+        setNotFound(true);
+      }
     })();
   }, [id, getAccessTokenSilently]);
+
+  if (notFound) {
+    return (
+      <>
+        <p style={{ color: "red", fontWeight: "bold" }}>
+          Sorry! We can't find that reservation
+        </p>
+        <Link
+          className="reservation-back-btn btn"
+          style={{ color: "black" }}
+          to="/reservations"
+        >
+          ← Back to reservations
+        </Link>
+      </>
+    );
+  }
 
   return (
     <>
@@ -35,7 +58,7 @@ const Reservation = () => {
       <hr />
 
       <Link
-        className="reservation-link btn"
+        className="reservation-back-btn btn"
         style={{ color: "black" }}
         to="/reservations"
       >

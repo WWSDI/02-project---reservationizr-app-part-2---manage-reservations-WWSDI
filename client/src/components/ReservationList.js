@@ -2,6 +2,8 @@ import "./ReservationList.css";
 import { formatDate } from "../utils/formatDate";
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import Reservation from "./Reservation";
+import { Link } from "react-router-dom";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -24,11 +26,13 @@ const ReservationList = () => {
   return (
     <>
       <h1>Upcoming reservations</h1>
-      {reservations.map(({ restaurantName, date }) => {
+      {reservations.map((reservation) => {
         return (
-          <div>
-            <h2>{restaurantName}</h2>
-            <p>{formatDate(date)}</p>
+          <div key={reservation.id}>
+            <h2>{reservation.restaurantName}</h2>
+            <p>{formatDate(reservation.date)}</p>
+            {/* <Reservation reservation={reservation} /> */}
+            <Link to={`/reservations/${reservation.id}`}>View details →</Link>
           </div>
         );
       })}

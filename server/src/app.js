@@ -38,6 +38,13 @@ app.get("/reservations", jwtCheck, async (req, res) => {
   res.status(200).send(allReservations);
 });
 
+app.get("/reservations/:id", jwtCheck, async (req, res) => {
+  const { id } = req.params;
+  const foundReservation = await ReservationModel.findById(id);
+  console.log("foundReservation", foundReservation);
+  res.status(200).send(foundReservation);
+});
+
 // Need celebrate&joi for data validation
 app.post(
   "/reservations",

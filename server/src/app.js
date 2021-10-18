@@ -38,9 +38,9 @@ app.get("/restaurants/:id", async (req, res) => {
     res.status(200).send(foundRestaurant);
   } catch (err) {
     if (!isValidObjectId(id)) {
-      res.status(400).send({ message: "id is invalid" });
+      res.status(400).send({ error: "invalid id provided" });
     } else {
-      res.status(404).send({ message: "id does not exist" });
+      res.status(404).send({ error: "restaurant not found" });
     }
   }
 });
@@ -61,19 +61,17 @@ app.get("/reservations/:id", jwtCheck, async (req, res) => {
     if (!foundReservation) throw new Error("NOT FOUND");
     if (foundReservation.userId !== userId)
       throw new Error("USER ID DO NOT MATCH");
-    // console.log("foundReservation", foundReservation);
+
     res.status(200).send(foundReservation);
   } catch (err) {
-    if (err.message === "NOT FOUND") {
-      res.status(404).send({ error: "not found" });
-    } else if (err.message === "USER ID DO NOT MATCH") {
-      res
-        .status(403)
-        .send({
-          error: "user does not have permission to access this reservation",
-        });
-    } else if (!isValidObjectId(id)) {
+    if (!isValidObjectId(id)) {
       res.status(400).send({ error: "invalid id provided" });
+    } else if (err.message === "USER ID DO NOT MATCH") {
+      res.status(403).send({
+        error: "user does not have permission to access this reservation",
+      });
+    } else if (err.message === "NOT FOUND") {
+      res.status(404).send({ error: "not found" });
     }
   }
 });
@@ -101,19 +99,9 @@ app.post(
     const newReservation = { date, partySize, userId, restaurantName };
     // console.log("😱newReservation", newReservation);
 
-    try {
-      const createdReservation = await ReservationModel.create(newReservation);
-      // console.log("😱 createdReservation", createdReservation);
-      res.status(201).send(createdReservation);
-    } catch (err) {
-      console.log("😱", err);
-      if (err.name === "SyntaxError") {
-        res.status(400).send("400");
-      } else {
-        // user not authenticated error
-        res.status(401).send("401");
-      }
-    }
+    const createdReservation = await ReservationModel.create(newReservation);
+    // console.log("😱 createdReservation", createdReservation);
+    res.status(201).send(createdReservation);
   },
 );
 

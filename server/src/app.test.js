@@ -62,7 +62,7 @@ describe("app", () => {
         .get("/restaurants/bad-id")
         .expect(400)
         .expect((res) => {
-          expect(res.body).toEqual({ message: "id is invalid" });
+          expect(res.body).toEqual({ error: "invalid id provided" });
         });
     });
     test("return 404 error code when given a valid but non-existent id", async () => {
@@ -71,7 +71,7 @@ describe("app", () => {
         .get(`/restaurants/${nonexistentValidId}`)
         .expect(404)
         .expect((res) => {
-          expect(res.body).toEqual({ message: "id does not exist" });
+          expect(res.body).toEqual({ error: "restaurant not found" });
         });
     });
   });
@@ -118,7 +118,7 @@ describe("app", () => {
   });
 
   // remaining status code: 401
-  describe.only("get a single reservation route", () => {
+  describe("get a single reservation route", () => {
     test("should return a single reservation", async () => {
       const reservation = {
         date: "2023-11-17T06:30:00.000Z",
@@ -196,7 +196,7 @@ describe("app", () => {
         });
     });
 
-    test("should return 400 error when request body missing partySize", async () => {
+    test("should return 400 error when partySize is missing", async () => {
       const noPartySize = {
         date: new Date(Date.now() + 1000 * 60 * 60 * 48),
         restaurantName: "Green Curry",

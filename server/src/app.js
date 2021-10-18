@@ -33,6 +33,11 @@ app.get("/restaurants/:id", async (req, res) => {
   res.status(200).send(foundRestaurant);
 });
 
+app.get("/reservations", jwtCheck, async (req, res) => {
+  const allReservations = await ReservationModel.find({});
+  res.status(200).send(allReservations);
+});
+
 // Need celebrate&joi for data validation
 app.post(
   "/reservations",
@@ -44,18 +49,15 @@ app.post(
         // reservation datetime should be at least 1hr more than current datetime
         .greater(new Date(Date.now() + 1000 * 60 * 60))
         .required(),
-      restaurantId: Joi.string().alphanum().required(),
+      restaurantName: Joi.string().min(2).max(50).required(),
     }),
   }),
   async (req, res) => {
     const {
-      body: { restaurantId, date, partySize },
+      body: { restaurantName, date, partySize },
       user: { sub: userId },
     } = req;
 
-    const { name: restaurantName } = await RestaurantModel.findById(
-      restaurantId,
-    );
     const newReservation = { date, partySize, userId, restaurantName };
     // console.log("😱newReservation", newReservation);
 

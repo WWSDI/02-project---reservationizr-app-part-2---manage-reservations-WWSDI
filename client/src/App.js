@@ -27,12 +27,18 @@ const App = () => {
             <CreateReservation />
           </Route> */}
           </ProtectedRoute>
-          <Route path="/reservations/:id">
-            <Reservation />
-          </Route>
-          <Route path="/reservations">
-            <ReservationList />
-          </Route>
+
+          <ProtectedRoute path="/reservations/:id" component={Reservation}>
+            {/* <Route path="/reservations/:id">
+              <Reservation />
+            </Route> */}
+          </ProtectedRoute>
+
+          <ProtectedRoute path="/reservations" component={ReservationList}>
+            {/* <Route path="/reservations">
+              <ReservationList />
+            </Route> */}
+          </ProtectedRoute>
 
           <Route path="/">
             <RestaurantList />

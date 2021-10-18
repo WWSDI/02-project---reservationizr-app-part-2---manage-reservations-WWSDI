@@ -32,12 +32,13 @@ const CreateReservation = () => {
     const newReservation = {
       date: startDate,
       partySize,
-      restaurantId,
+      restaurantName,
     };
     console.log("🌸", newReservation, typeof newReservation);
 
     (async () => {
       const accessToken = await getAccessTokenSilently();
+      console.log("**ACCESSTOKEN", accessToken);
       const response = await fetch("http://localhost:5000/reservations", {
         method: "post",
         headers: {

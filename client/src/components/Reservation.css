@@ -1,0 +1,14 @@
+.reservation-title {
+  display: inline;
+}
+
+hr {
+  height: 0;
+  border: 0;
+  border-bottom: 2px dashed lightgray;
+  margin: 3rem 0;
+}
+
+.reservation-link {
+  background-color: lightgray;
+}

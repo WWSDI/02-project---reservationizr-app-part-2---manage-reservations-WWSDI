@@ -25,7 +25,7 @@ const Reservation = () => {
 
   return (
     <>
-      <h1>{restaurantName}</h1>
+      <h1 className="reservation-title">{restaurantName}</h1>
       <p>{date ? formatDate(date) : date}</p>
       <p>
         <strong>Party size: </strong>
@@ -34,7 +34,13 @@ const Reservation = () => {
 
       <hr />
 
-      <Link to="/reservations">← Back to reservations</Link>
+      <Link
+        className="reservation-link btn"
+        style={{ color: "black" }}
+        to="/reservations"
+      >
+        ← Back to reservations
+      </Link>
     </>
   );
 };

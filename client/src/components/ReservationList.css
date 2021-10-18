@@ -1,0 +1,41 @@
+.reservationList-container > * {
+  border-bottom: 1px dashed lightgray;
+  margin: 1rem;
+}
+
+.reservation-container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.reservation-container > * {
+  margin: 0.5rem 0;
+}
+
+.reservation-name {
+  font-size: 1rem;
+}
+
+.reservation-date {
+  color: gray;
+}
+.reservation-link {
+  color: red;
+  margin-bottom: 2rem;
+}
+
+@media only screen and (min-width: 30rem) {
+  .reservation-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    text-align: left;
+    align-items: center;
+  }
+  .reservation-container > * {
+    margin: 1.5rem 0;
+    margin-top: 0.5rem;
+  }
+  .reservation-link {
+    text-align: right;
+  }
+}

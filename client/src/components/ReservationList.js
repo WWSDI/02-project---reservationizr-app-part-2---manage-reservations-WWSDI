@@ -24,15 +24,22 @@ const ReservationList = () => {
   return (
     <>
       <h1>Upcoming reservations</h1>
-      {reservations.map((reservation) => {
-        return (
-          <div key={reservation.id}>
-            <h2>{reservation.restaurantName}</h2>
-            <p>{formatDate(reservation.date)}</p>
-            <Link to={`/reservations/${reservation.id}`}>View details →</Link>
-          </div>
-        );
-      })}
+      <div className="reservationList-container">
+        {reservations.map((reservation) => {
+          return (
+            <div className="reservation-container" key={reservation.id}>
+              <h2 className="reservation-name">{reservation.restaurantName}</h2>
+              <p className="reservation-date">{formatDate(reservation.date)}</p>
+              <Link
+                className="reservation-link"
+                to={`/reservations/${reservation.id}`}
+              >
+                View details →
+              </Link>
+            </div>
+          );
+        })}
+      </div>
     </>
   );
 };

@@ -28,7 +28,7 @@ const RestaurantList = () => {
               className="restaurant-btn btn"
               to={{
                 pathname: `/restaurants/${id}/reserve`,
-                state: { restaurantName: name },
+                // state: { restaurantName: name },
               }}
             >
               Reserve now →

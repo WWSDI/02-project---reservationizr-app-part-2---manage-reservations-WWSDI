@@ -1,5 +1,5 @@
 import DatePicker from "react-datepicker";
-import { useParams, useHistory, useLocation } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import "./CreateReservation.css";
 import { useEffect, useState } from "react";
@@ -16,21 +16,15 @@ const CreateReservation = () => {
     "testing-react-restaurant-name",
   );
   const history = useHistory();
-  // const {
-  //   state: { restaurantName },
-  // } = useLocation();
-  // console.log("🌸", state);
   const { getAccessTokenSilently } = useAuth0();
 
-  // useEffect(() => {
-  //   fetch(`http://localhost:5000/restaurants/${restaurantId}`)
-  //     .then((res) => {
-  //       res.json();
-  //     })
-  //     .then((data) => {
-  //       setRestaurantName(data.name);
-  //     });
-  // });
+  useEffect(() => {
+    fetch(`http://localhost:5000/restaurants/${restaurantId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setRestaurantName(data.name);
+      });
+  }, [restaurantId]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

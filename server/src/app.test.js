@@ -36,4 +36,17 @@ describe("app", () => {
         });
     });
   });
+
+  describe("create a new reservation route", ()=>{
+    const newReservation={
+      partySize: 3,
+      date: new Date(),
+      restaurantId: ''
+    }
+
+    test('request body should contain partySize', async()=>{
+      await request(app).post("/reservations")
+      .send()
+    })
+  })
 });

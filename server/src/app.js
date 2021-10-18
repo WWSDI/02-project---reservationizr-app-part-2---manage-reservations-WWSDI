@@ -26,6 +26,13 @@ app.get("/restaurants", async (req, res) => {
   res.status(200).send(allRestaurants);
 });
 
+app.get("/restaurants/:id", async (req, res) => {
+  const { id } = req.params;
+  const foundRestaurant = await RestaurantModel.findById(id);
+  console.log("✅foundRestaurant", foundRestaurant);
+  res.status(200).send(foundRestaurant);
+});
+
 // Need celebrate&joi for data validation
 app.post(
   "/reservations",

@@ -10,7 +10,6 @@ app.use(express.json());
 
 app.get("/restaurants", async (req, res) => {
   const allRestaurants = await RestaurantModel.find({});
-  console.log("😱", allRestaurants);
   res.status(200).send(allRestaurants);
 });
 
@@ -22,7 +21,7 @@ app.post(
       partySize: Joi.number().min(1).max(30).required(),
       date: Joi.date()
         // reservation datetime should be at least 1hr more than current datetime
-        .greater(new Date(Date.now() + 60 * 60))
+        .greater(new Date(Date.now() + 1000 * 60 * 60))
         .required(),
       userId: Joi.string().required(),
       restaurantName: Joi.string().min(2).max(70).required(),

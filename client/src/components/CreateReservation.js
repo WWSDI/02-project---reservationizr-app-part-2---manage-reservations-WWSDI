@@ -1,38 +1,45 @@
 import DatePicker from "react-datepicker";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, useLocation } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import "./CreateReservation.css";
 import { useState } from "react";
 
 const CreateReservation = () => {
   const { restaurantId } = useParams();
-  const [partySize, setPartySize] = useState(2);
+  const [partySize, setPartySize] = useState('');
   // set default date to be 24hrs from now
   const [startDate, setStartDate] = useState(
-    new Date(Date.now() + 60 * 60 * 24 * 1000),
+    new Date(Date.now() + 1000 * 60 * 60 * 24),
   );
   const history = useHistory();
+  const {
+    state: { restaurantName },
+  } = useLocation();
+  // console.log("🌸", state);
+
+  const mockUserId = "mockUser123";
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newReservation = {
-      // userId,
-      startDate,
+      userId: mockUserId,
+      date: startDate,
       partySize,
-      // restaurantName,
+      restaurantName,
     };
     console.log("🌸", newReservation, typeof newReservation);
 
     (async () => {
       const response = await fetch("http://localhost:5000/reservations", {
-        header: {
+        method: "post",
+        headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newReservation),
       });
-      const data = await response;
-
-      if (data.ok) {
+      const data = await response.json();
+      console.log("🌸🌸", response, data);
+      if (response.ok) {
         history.push("/reservations");
       }
     })();
@@ -40,7 +47,8 @@ const CreateReservation = () => {
 
   return (
     <>
-      <h1>Reserve placerholdername</h1>
+      <h1>Reserve {restaurantName}</h1>
+      {/* <h2>DEL: {restaurantId}</h2> */}
       <form onSubmit={handleSubmit}>
         <label>
           Number of guests
@@ -48,7 +56,7 @@ const CreateReservation = () => {
             id="numGuest"
             type="number"
             value={partySize}
-            onChange={(e) => setPartySize(e.target.value)}
+            onChange={(e) => setPartySize(Number(e.target.value))}
           />
         </label>
         <label>

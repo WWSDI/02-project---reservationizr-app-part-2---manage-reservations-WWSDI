@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./RestaurantList.css";
 
 const RestaurantList = () => {
@@ -22,10 +23,16 @@ const RestaurantList = () => {
             <div className="restaurant-text">
               <h2 className="restaurant-name">{name}</h2>
               <p className="restaurant-description">{description}</p>
-
             </div>
-
-            <div className="restaurant-btn btn">Reserve now →</div>
+            <Link
+              className="restaurant-btn btn"
+              to={{
+                pathname: `/restaurants/${id}/reserve`,
+                state: { restaurantName: name },
+              }}
+            >
+              Reserve now →
+            </Link>
           </div>
         );
       })}

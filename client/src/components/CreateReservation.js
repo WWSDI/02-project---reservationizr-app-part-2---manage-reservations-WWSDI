@@ -59,24 +59,23 @@ const CreateReservation = () => {
     <>
       <h1>Reserve {restaurantName}</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Number of guests
-          <input
-            id="numGuest"
-            type="number"
-            value={partySize}
-            onChange={(e) => setPartySize(Number(e.target.value))}
-          />
-        </label>
-        <label>
-          Date
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            showTimeSelect
-            dateFormat="Pp"
-          />
-        </label>
+        <label htmlFor="numGuest">Number of guests</label>
+        <input
+          id="numGuest"
+          className="input-field"
+          type="number"
+          value={partySize}
+          onChange={(e) => setPartySize(Number(e.target.value))}
+        />
+        <label htmlFor="id">Date</label>
+        <DatePicker
+          id="date"
+          className="input-field"
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          showTimeSelect
+          dateFormat="Pp"
+        />
         <button className="reservation-submit btn">Submit</button>
       </form>
     </>

@@ -5,6 +5,10 @@ body {
   line-height: 1.5;
 }
 
+button {
+  border: none;
+}
+
 .container {
   max-width: 40rem;
   margin: 0 auto;
@@ -28,7 +32,7 @@ h1 {
 }
 
 .btn {
-  background:rgba(255, 0, 0, 0.906); 
+  background: rgba(255, 0, 0, 0.906);
   border-radius: 0.5rem;
   display: inline-block;
   color: white;
@@ -39,6 +43,7 @@ h1 {
 
 .btn:active,
 .btn:hover {
+  cursor: pointer;
   text-decoration: underline;
 }
 

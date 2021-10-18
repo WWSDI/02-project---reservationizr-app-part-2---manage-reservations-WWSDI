@@ -117,7 +117,59 @@ describe("app", () => {
     // });
   });
 
+  // remaining status code: 401
+  describe.only("get a single reservation route", () => {
+    test("should return a single reservation", async () => {
+      const reservation = {
+        date: "2023-11-17T06:30:00.000Z",
+        id: "507f1f77bcf86cd799439011",
+        partySize: 4,
+        restaurantName: "Island Grill",
+        userId: "mock-user-id",
+      };
 
+      await request(app)
+        .get("/reservations/507f1f77bcf86cd799439011")
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toEqual(reservation);
+        });
+    });
+    test("should return 400 error code when invalid id is provided", async () => {
+      await request(app)
+        .get("/reservations/bad-id")
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual({ error: "invalid id provided" });
+        });
+    });
+    test("should return 403 error when querying reservation created by another user", async () => {
+      const reservationIdByAnotherUser = "61679189b54f48aa6599a7fd";
+
+      const errorResponse = {
+        error: "user does not have permission to access this reservation",
+      };
+
+      await request(app)
+        .get("/reservations/" + reservationIdByAnotherUser)
+        .expect(403)
+        .expect((res) => {
+          expect(res.body).toEqual(errorResponse);
+        });
+    });
+    test("should return 404 when id cannot be found", async () => {
+      const notFoundId = "616cd6f5ba429b5b92d1e613";
+
+      await request(app)
+        .get(`/reservations/${notFoundId}`)
+        .expect(404)
+        .expect((res) => {
+          expect(res.body).toEqual({
+            error: "not found",
+          });
+        });
+    });
+  });
 
   // remaining status code: 401
   describe("create a new reservation route", () => {

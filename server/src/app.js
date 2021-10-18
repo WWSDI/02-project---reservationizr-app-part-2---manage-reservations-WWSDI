@@ -47,16 +47,35 @@ app.get("/restaurants/:id", async (req, res) => {
 
 // 2 status code: 200, 401
 app.get("/reservations", jwtCheck, async (req, res) => {
-  const allReservations = await ReservationModel.find({});
-  res.status(200).send(allReservations);
+  const { sub: userId } = req.user;
+  const allMyReservations = await ReservationModel.find({ userId });
+  res.status(200).send(allMyReservations);
 });
 
 // 5 status code: 200, 400, 401, 403, 404
 app.get("/reservations/:id", jwtCheck, async (req, res) => {
   const { id } = req.params;
-  const foundReservation = await ReservationModel.findById(id);
-  console.log("foundReservation", foundReservation);
-  res.status(200).send(foundReservation);
+  const userId = req.user.sub;
+  try {
+    const foundReservation = await ReservationModel.findById(id);
+    if (!foundReservation) throw new Error("NOT FOUND");
+    if (foundReservation.userId !== userId)
+      throw new Error("USER ID DO NOT MATCH");
+    // console.log("foundReservation", foundReservation);
+    res.status(200).send(foundReservation);
+  } catch (err) {
+    if (err.message === "NOT FOUND") {
+      res.status(404).send({ error: "not found" });
+    } else if (err.message === "USER ID DO NOT MATCH") {
+      res
+        .status(403)
+        .send({
+          error: "user does not have permission to access this reservation",
+        });
+    } else if (!isValidObjectId(id)) {
+      res.status(400).send({ error: "invalid id provided" });
+    }
+  }
 });
 
 // 3 status code: 200, 400, 401

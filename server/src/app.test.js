@@ -76,10 +76,10 @@ describe("app", () => {
     });
   });
 
-  // 2 status code: 200, 401
-  describe.only("get all reservations route", () => {
-    test("should return all reservations", async () => {
-      const allReservations = [
+  // remaining status code: 401
+  describe("get all reservations route", () => {
+    test("should return all reservations made by one user", async () => {
+      const allMyReservations = [
         {
           date: "2023-11-17T06:30:00.000Z",
           id: "507f1f77bcf86cd799439011",
@@ -94,48 +94,256 @@ describe("app", () => {
           restaurantName: "Green Curry",
           userId: "mock-user-id",
         },
-        {
-          date: "2023-12-03T07:00:00.000Z",
-          id: "61679189b54f48aa6599a7fd",
-          partySize: 2,
-          restaurantName: "Green Curry",
-          userId: "another-user-id",
-        },
       ];
 
       await request(app)
         .get("/reservations")
         .expect(200)
         .expect((res) => {
-          expect(res.body).toMatchObject(allReservations);
+          expect(res.body).toMatchObject(allMyReservations);
         });
     });
-    test("should return 404 error code when user is unauthorized", async () => {
-      await request(app)
-        .get("/reservations")
-        .set("Authorization", "fake-access-token")
-        .expect(401)
-        .expect((res) => {
-          expect(res.text).toBe(
-            "UnauthorizedError: No authorization token was found",
-          );
-        });
-    });
+    // ❌❌ not sure if it's even possible to write negative test for this route
+    // test("should return 404 error code when user is unauthorized", async () => {
+    //   await request(app)
+    //     .get("/reservations")
+    //     .set("Authorization", "fake-access-token")
+    //     .expect(401)
+    //     .expect((res) => {
+    //       expect(res.text).toBe(
+    //         "UnauthorizedError: No authorization token was found",
+    //       );
+    //     });
+    // });
   });
 
-  // 5 status code: 200, 400, 401, 403, 404
-  describe("get a single reservation route", () => {});
 
-  // 3 status code: 201, 400, 401
-  describe.skip("create a new reservation route", () => {
-    const newReservation = {
-      partySize: 3,
-      date: new Date(),
-      restaurantId: "",
-    };
 
-    test("request body should contain partySize", async () => {
-      await request(app).post("/reservations").send();
+  // remaining status code: 401
+  describe("create a new reservation route", () => {
+    test("should create a new reservation", async () => {
+      const newReservation = {
+        partySize: 3,
+        date: "2021-11-20T16:41:49.087Z",
+        restaurantName: "Green Curry",
+      };
+
+      const expectedReservation = {
+        partySize: 3,
+        date: "2021-11-20T16:41:49.087Z",
+        restaurantName: "Green Curry",
+        userId: "mock-user-id",
+      };
+
+      await request(app)
+        .post("/reservations")
+        .send(newReservation)
+        .expect(201)
+        .expect((res) => {
+          expect(res.body).toMatchObject(expectedReservation);
+        });
+    });
+
+    test("should return 400 error when request body missing partySize", async () => {
+      const noPartySize = {
+        date: new Date(Date.now() + 1000 * 60 * 60 * 48),
+        restaurantName: "Green Curry",
+      };
+      const expectedError = {
+        error: "Bad Request",
+        message: "Validation failed",
+        statusCode: 400,
+        validation: {
+          body: {
+            keys: ["partySize"],
+            message: '"partySize" is required',
+            source: "body",
+          },
+        },
+      };
+      await request(app)
+        .post("/reservations")
+        .send(noPartySize)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual(expectedError);
+        });
+    });
+    test("should return 400 error when partySize exceeds 30", async () => {
+      const badRequestBody = {
+        partySize: 31,
+        date: new Date(Date.now() + 1000 * 60 * 60 * 48),
+        restaurantName: "Green Curry",
+      };
+      const expectedError = {
+        error: "Bad Request",
+        message: "Validation failed",
+        statusCode: 400,
+        validation: {
+          body: {
+            keys: ["partySize"],
+            message: '"partySize" must be less than or equal to 30',
+            source: "body",
+          },
+        },
+      };
+      await request(app)
+        .post("/reservations")
+        .send(badRequestBody)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual(expectedError);
+        });
+    });
+    test("should return 400 error when partySize smaller than 1", async () => {
+      const badRequestBody = {
+        partySize: -1,
+        date: new Date(Date.now() + 1000 * 60 * 60 * 48),
+        restaurantName: "Green Curry",
+      };
+      const expectedError = {
+        error: "Bad Request",
+        message: "Validation failed",
+        statusCode: 400,
+        validation: {
+          body: {
+            keys: ["partySize"],
+            message: '"partySize" must be greater than or equal to 1',
+            source: "body",
+          },
+        },
+      };
+      await request(app)
+        .post("/reservations")
+        .send(badRequestBody)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toEqual(expectedError);
+        });
+    });
+    test("should return 400 error when date is less than an hour from now", async () => {
+      const badRequestBody = {
+        partySize: 1,
+        date: "2021-10-18T17:53:50.265Z",
+        restaurantName: "Green Curry",
+      };
+      const expectedError = {
+        error: "Bad Request",
+        message: "Validation failed",
+        statusCode: 400,
+        validation: {
+          body: {
+            keys: ["date"],
+            source: "body",
+          },
+        },
+      };
+      await request(app)
+        .post("/reservations")
+        .send(badRequestBody)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toMatchObject(expectedError);
+        });
+    });
+    test("should return 400 error when date is missing", async () => {
+      const badRequestBody = {
+        partySize: 1,
+        restaurantName: "Green Curry",
+      };
+      const expectedError = {
+        error: "Bad Request",
+        message: "Validation failed",
+        statusCode: 400,
+        validation: {
+          body: {
+            keys: ["date"],
+            source: "body",
+          },
+        },
+      };
+      await request(app)
+        .post("/reservations")
+        .send(badRequestBody)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toMatchObject(expectedError);
+        });
+    });
+    test("should return 400 error when restaurantName is missing", async () => {
+      const badRequestBody = {
+        partySize: 1,
+        date: new Date(Date.now() + 1000 * 60 * 60 * 48),
+      };
+      const expectedError = {
+        error: "Bad Request",
+        message: "Validation failed",
+        statusCode: 400,
+        validation: {
+          body: {
+            keys: ["restaurantName"],
+            source: "body",
+          },
+        },
+      };
+      await request(app)
+        .post("/reservations")
+        .send(badRequestBody)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toMatchObject(expectedError);
+        });
+    });
+    test("should return 400 error when restaurantName length is less than 2", async () => {
+      const badRequestBody = {
+        partySize: 1,
+        date: new Date(Date.now() + 1000 * 60 * 60 * 48),
+        restaurantName: "R",
+      };
+      const expectedError = {
+        error: "Bad Request",
+        message: "Validation failed",
+        statusCode: 400,
+        validation: {
+          body: {
+            keys: ["restaurantName"],
+            source: "body",
+          },
+        },
+      };
+      await request(app)
+        .post("/reservations")
+        .send(badRequestBody)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toMatchObject(expectedError);
+        });
+    });
+    test("should return 400 error when restaurantName is too long", async () => {
+      const badRequestBody = {
+        partySize: 1,
+        date: new Date(Date.now() + 1000 * 60 * 60 * 48),
+        restaurantName:
+          "this is a very very very long restaurant name that is almost certainly longer than expected",
+      };
+      const expectedError = {
+        error: "Bad Request",
+        message: "Validation failed",
+        statusCode: 400,
+        validation: {
+          body: {
+            keys: ["restaurantName"],
+            source: "body",
+          },
+        },
+      };
+      await request(app)
+        .post("/reservations")
+        .send(badRequestBody)
+        .expect(400)
+        .expect((res) => {
+          expect(res.body).toMatchObject(expectedError);
+        });
     });
   });
 });

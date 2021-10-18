@@ -21,7 +21,6 @@ const CreateReservation = () => {
   // } = useLocation();
   // console.log("🌸", state);
   const { getAccessTokenSilently } = useAuth0();
-  const mockUserId = "mockUser123";
 
   // useEffect(() => {
   //   fetch(`http://localhost:5000/restaurants/${restaurantId}`)
@@ -37,10 +36,9 @@ const CreateReservation = () => {
     e.preventDefault();
 
     const newReservation = {
-      userId: mockUserId,
       date: startDate,
       partySize,
-      restaurantName,
+      restaurantId,
     };
     console.log("🌸", newReservation, typeof newReservation);
 

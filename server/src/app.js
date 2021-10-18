@@ -37,16 +37,25 @@ app.post(
         // reservation datetime should be at least 1hr more than current datetime
         .greater(new Date(Date.now() + 1000 * 60 * 60))
         .required(),
-      userId: Joi.string().required(),
-      restaurantName: Joi.string().min(2).max(70).required(),
+      restaurantId: Joi.string().alphanum().required(),
     }),
   }),
   async (req, res) => {
-    const { body } = req;
-    console.log("😱", body);
+    const {
+      body: { restaurantId, date, partySize },
+      user: { sub: userId },
+    } = req;
+
+    const { name: restaurantName } = await RestaurantModel.findById(
+      restaurantId,
+    );
+    const newReservation = { date, partySize, userId, restaurantName };
+    // console.log("😱newReservation", newReservation);
+
     try {
-      const newReservation = await ReservationModel.create(body);
-      res.status(200).send(newReservation);
+      const createdReservation = await ReservationModel.create(newReservation);
+      // console.log("😱 createdReservation", createdReservation);
+      res.status(200).send(createdReservation);
     } catch (err) {
       console.log("😱", err);
       if (err.name === "SyntaxError") {

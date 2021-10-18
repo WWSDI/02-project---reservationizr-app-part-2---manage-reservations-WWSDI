@@ -19,27 +19,33 @@ app.post(
   "/reservations",
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      partySize: Joi.number().min(1).max(20).required(),
-      date: Joi.date().greater(new Date()).required(),
+      partySize: Joi.number().min(1).max(30).required(),
+      date: Joi.date()
+        // reservation datetime should be at least 1hr more than current datetime
+        .greater(new Date(Date.now() + 60 * 60))
+        .required(),
       userId: Joi.string().required(),
-      restaurantName: Joi.string().required(),
+      restaurantName: Joi.string().min(2).max(70).required(),
     }),
   }),
   async (req, res) => {
     const { body } = req;
     console.log("😱", body);
     try {
-      // date: > current timestamp
-      // const date = new Date(body.date);
       const newReservation = await ReservationModel.create(body);
       res.status(200).send(newReservation);
     } catch (err) {
       console.log("😱", err);
-      res.status(400).send("400");
-      // user not authenticated error
-      res.status(401).send("401");
+      if (err.name === "SyntaxError") {
+        res.status(400).send("400");
+      } else {
+        // user not authenticated error
+        res.status(401).send("401");
+      }
     }
   },
 );
+
+app.use(errors());
 
 module.exports = app;

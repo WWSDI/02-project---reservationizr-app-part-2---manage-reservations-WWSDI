@@ -21,11 +21,13 @@ const jwtCheck = jwt({
 app.use(cors());
 app.use(express.json());
 
+// ✅ 1 status code: 200
 app.get("/restaurants", async (req, res) => {
   const allRestaurants = await RestaurantModel.find({});
   res.status(200).send(allRestaurants);
 });
 
+// 3 status code: 200, 400, 404
 app.get("/restaurants/:id", async (req, res) => {
   const { id } = req.params;
   const foundRestaurant = await RestaurantModel.findById(id);
@@ -33,11 +35,13 @@ app.get("/restaurants/:id", async (req, res) => {
   res.status(200).send(foundRestaurant);
 });
 
+// 2 status code: 200, 401
 app.get("/reservations", jwtCheck, async (req, res) => {
   const allReservations = await ReservationModel.find({});
   res.status(200).send(allReservations);
 });
 
+// 5 status code: 200, 400, 401, 403, 404
 app.get("/reservations/:id", jwtCheck, async (req, res) => {
   const { id } = req.params;
   const foundReservation = await ReservationModel.findById(id);
@@ -45,7 +49,7 @@ app.get("/reservations/:id", jwtCheck, async (req, res) => {
   res.status(200).send(foundReservation);
 });
 
-// Need celebrate&joi for data validation
+// 3 status code: 200, 400, 401
 app.post(
   "/reservations",
   jwtCheck,
@@ -71,7 +75,7 @@ app.post(
     try {
       const createdReservation = await ReservationModel.create(newReservation);
       // console.log("😱 createdReservation", createdReservation);
-      res.status(200).send(createdReservation);
+      res.status(201).send(createdReservation);
     } catch (err) {
       console.log("😱", err);
       if (err.name === "SyntaxError") {

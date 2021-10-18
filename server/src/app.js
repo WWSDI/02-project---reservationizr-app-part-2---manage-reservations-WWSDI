@@ -28,7 +28,7 @@ app.get("/restaurants", async (req, res) => {
   res.status(200).send(allRestaurants);
 });
 
-// 3 status code: 200, 400, 404
+// ✅ 3 status code: 200, 400, 404
 app.get("/restaurants/:id", async (req, res) => {
   const { id } = req.params;
   try {

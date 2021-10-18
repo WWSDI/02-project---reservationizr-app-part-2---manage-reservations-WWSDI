@@ -77,7 +77,51 @@ describe("app", () => {
   });
 
   // 2 status code: 200, 401
-  describe.only("get all reservations route", () => {});
+  describe.only("get all reservations route", () => {
+    test("should return all reservations", async () => {
+      const allReservations = [
+        {
+          date: "2023-11-17T06:30:00.000Z",
+          id: "507f1f77bcf86cd799439011",
+          partySize: 4,
+          restaurantName: "Island Grill",
+          userId: "mock-user-id",
+        },
+        {
+          date: "2023-12-03T07:00:00.000Z",
+          id: "614abf0a93e8e80ace792ac6",
+          partySize: 2,
+          restaurantName: "Green Curry",
+          userId: "mock-user-id",
+        },
+        {
+          date: "2023-12-03T07:00:00.000Z",
+          id: "61679189b54f48aa6599a7fd",
+          partySize: 2,
+          restaurantName: "Green Curry",
+          userId: "another-user-id",
+        },
+      ];
+
+      await request(app)
+        .get("/reservations")
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toMatchObject(allReservations);
+        });
+    });
+    test("should return 404 error code when user is unauthorized", async () => {
+      await request(app)
+        .get("/reservations")
+        .set("Authorization", "fake-access-token")
+        .expect(401)
+        .expect((res) => {
+          expect(res.text).toBe(
+            "UnauthorizedError: No authorization token was found",
+          );
+        });
+    });
+  });
 
   // 5 status code: 200, 400, 401, 403, 404
   describe("get a single reservation route", () => {});

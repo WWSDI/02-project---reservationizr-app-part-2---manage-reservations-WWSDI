@@ -2,7 +2,6 @@ const request = require("supertest");
 const app = require("./app");
 
 describe("app", () => {
-  // ✅ 1 status code: 200
   describe("get all restaurants route", () => {
     test("should return a list of all restaurants", async () => {
       const allRestaurants = [
@@ -38,7 +37,6 @@ describe("app", () => {
     });
   });
 
-  // ✅ 3 status code: 200, 400, 404
   describe("get a single restaurant route", () => {
     // Happy path
     test("should return a single restaurant", async () => {
@@ -76,7 +74,6 @@ describe("app", () => {
     });
   });
 
-  // remaining status code: 401
   describe("get all reservations route", () => {
     test("should return all reservations made by one user", async () => {
       const allMyReservations = [
@@ -117,7 +114,6 @@ describe("app", () => {
     // });
   });
 
-  // remaining status code: 401
   describe("get a single reservation route", () => {
     test("should return a single reservation", async () => {
       const reservation = {
@@ -171,7 +167,6 @@ describe("app", () => {
     });
   });
 
-  // remaining status code: 401
   describe("create a new reservation route", () => {
     test("should create a new reservation", async () => {
       const newReservation = {

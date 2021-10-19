@@ -12,9 +12,7 @@ const CreateReservation = () => {
   const [startDate, setStartDate] = useState(
     new Date(Date.now() + 1000 * 60 * 60 * 24),
   );
-  const [restaurantName, setRestaurantName] = useState(
-    "testing-react-restaurant-name",
-  );
+  const [restaurantName, setRestaurantName] = useState("");
   const history = useHistory();
   const { getAccessTokenSilently } = useAuth0();
 
@@ -34,11 +32,9 @@ const CreateReservation = () => {
       partySize,
       restaurantName,
     };
-    console.log("🌸", newReservation, typeof newReservation);
 
     (async () => {
       const accessToken = await getAccessTokenSilently();
-      console.log("**ACCESSTOKEN", accessToken);
       const response = await fetch("http://localhost:5000/reservations", {
         method: "post",
         headers: {
@@ -47,8 +43,6 @@ const CreateReservation = () => {
         },
         body: JSON.stringify(newReservation),
       });
-      // const data = await response.json();
-      console.log("🌸🌸", response);
       if (response.ok) {
         history.push("/reservations");
       }

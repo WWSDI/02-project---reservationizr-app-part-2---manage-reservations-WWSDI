@@ -22,13 +22,11 @@ const jwtCheck = jwt({
 app.use(cors());
 app.use(express.json());
 
-// ✅ 1 status code: 200
 app.get("/restaurants", async (req, res) => {
   const allRestaurants = await RestaurantModel.find({});
   res.status(200).send(allRestaurants);
 });
 
-// ✅ 3 status code: 200, 400, 404
 app.get("/restaurants/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -45,14 +43,12 @@ app.get("/restaurants/:id", async (req, res) => {
   }
 });
 
-// 2 status code: 200, 401
 app.get("/reservations", jwtCheck, async (req, res) => {
   const { sub: userId } = req.user;
   const allMyReservations = await ReservationModel.find({ userId });
   res.status(200).send(allMyReservations);
 });
 
-// 5 status code: 200, 400, 401, 403, 404
 app.get("/reservations/:id", jwtCheck, async (req, res) => {
   const { id } = req.params;
   const userId = req.user.sub;
@@ -70,13 +66,12 @@ app.get("/reservations/:id", jwtCheck, async (req, res) => {
       res.status(403).send({
         error: "user does not have permission to access this reservation",
       });
-    } else if (err.message === "NOT FOUND") {
+    } else {
       res.status(404).send({ error: "not found" });
     }
   }
 });
 
-// 3 status code: 200, 400, 401
 app.post(
   "/reservations",
   jwtCheck,
@@ -97,10 +92,7 @@ app.post(
     } = req;
 
     const newReservation = { date, partySize, userId, restaurantName };
-    // console.log("😱newReservation", newReservation);
-
     const createdReservation = await ReservationModel.create(newReservation);
-    // console.log("😱 createdReservation", createdReservation);
     res.status(201).send(createdReservation);
   },
 );

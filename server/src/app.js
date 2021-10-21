@@ -32,7 +32,6 @@ app.get("/restaurants/:id", async (req, res) => {
   try {
     const foundRestaurant = await RestaurantModel.findById(id);
     if (!foundRestaurant) throw new Error("Restaurant NOT FOUND!");
-    // console.log("✅foundRestaurant", foundRestaurant);
     res.status(200).send(foundRestaurant);
   } catch (err) {
     if (!isValidObjectId(id)) {
@@ -79,7 +78,7 @@ app.post(
     [Segments.BODY]: Joi.object().keys({
       partySize: Joi.number().min(1).max(30).required(),
       date: Joi.date()
-        // reservation datetime should be at least 1hr more than current datetime
+        // reservation datetime should at least be 1hr greater than current datetime
         .greater(new Date(Date.now() + 1000 * 60 * 60))
         .required(),
       restaurantName: Joi.string().min(2).max(50).required(),

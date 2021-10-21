@@ -100,18 +100,6 @@ describe("app", () => {
           expect(res.body).toMatchObject(allMyReservations);
         });
     });
-    // ❌❌ not sure if it's even possible to write negative test for this route
-    // test("should return 404 error code when user is unauthorized", async () => {
-    //   await request(app)
-    //     .get("/reservations")
-    //     .set("Authorization", "fake-access-token")
-    //     .expect(401)
-    //     .expect((res) => {
-    //       expect(res.text).toBe(
-    //         "UnauthorizedError: No authorization token was found",
-    //       );
-    //     });
-    // });
   });
 
   describe("get a single reservation route", () => {

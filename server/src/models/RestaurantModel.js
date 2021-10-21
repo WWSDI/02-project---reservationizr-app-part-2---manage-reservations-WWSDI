@@ -1,7 +1,7 @@
 // FIXME: Add a Mongoose model here
-const mongoose = require("mongoose");
+const {Schema, model} = require("mongoose");
 
-const RestaurantSchema = new mongoose.Schema(
+const RestaurantSchema = new Schema(
   {
     name: { type: String, required: true },
     description: { type: String, required: true },
@@ -17,6 +17,6 @@ const RestaurantSchema = new mongoose.Schema(
     },
   },
 );
-const RestaurantModel = mongoose.model("Restaurant", RestaurantSchema);
+const RestaurantModel = model("Restaurant", RestaurantSchema);
 
 module.exports = RestaurantModel;

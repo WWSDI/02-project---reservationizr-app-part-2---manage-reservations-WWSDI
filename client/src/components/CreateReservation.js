@@ -15,6 +15,7 @@ const CreateReservation = () => {
   const [restaurantName, setRestaurantName] = useState("");
   const history = useHistory();
   const { getAccessTokenSilently } = useAuth0();
+  const [invalidKeys, setInvalidKeys] = useState([]);
 
   useEffect(() => {
     fetch(`http://localhost:5000/restaurants/${restaurantId}`)
@@ -45,12 +46,37 @@ const CreateReservation = () => {
       });
       if (response.ok) {
         history.push("/reservations");
+      } else if (response.status === 400) {
+        const data = await response.json();
+        console.log("🌸", data);
+        setInvalidKeys(data.validation.body.keys);
       }
     })();
   };
 
   return (
     <>
+      {invalidKeys.includes("partySize") ? (
+        <p
+          style={{ color: "deepred", backgroundColor: "gold", padding: "1rem" }}
+        >
+          ⛔️ You have entered a wrong <strong>Number of Guests</strong>.
+          Please make sure you enter a number between 1 and 30.
+        </p>
+      ) : (
+        <></>
+      )}
+      {invalidKeys.includes("date") ? (
+        <p
+          style={{ color: "deepred", backgroundColor: "gold", padding: "1rem" }}
+        >
+          ⛔️ You have entered a wrong <strong>Date</strong>. Please make sure
+          the date is at least <strong>one hour into the future</strong> from
+          now.
+        </p>
+      ) : (
+        <></>
+      )}
       <h1>Reserve {restaurantName}</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="numGuest">Number of guests</label>
@@ -59,14 +85,20 @@ const CreateReservation = () => {
           className="input-field"
           type="number"
           value={partySize}
-          onChange={(e) => setPartySize(Number(e.target.value))}
+          onChange={(e) => {
+            setInvalidKeys([]);
+            setPartySize(Number(e.target.value));
+          }}
         />
         <label htmlFor="id">Date</label>
         <DatePicker
           id="date"
           className="input-field"
           selected={startDate}
-          onChange={(date) => setStartDate(date)}
+          onChange={(date) => {
+            setInvalidKeys([]);
+            setStartDate(date);
+          }}
           showTimeSelect
           dateFormat="Pp"
         />

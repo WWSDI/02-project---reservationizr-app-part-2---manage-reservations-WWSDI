@@ -2,7 +2,7 @@
 
 const { Schema, model } = require("mongoose");
 
-const ReservationSchema = Schema(
+const ReservationSchema = new Schema(
   {
     partySize: { type: Number, required: true },
     date: { type: Date, required: true },

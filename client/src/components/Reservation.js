@@ -23,7 +23,6 @@ const Reservation = () => {
         const data = await response.json();
         setReservation(data);
       } else if (response.status === 404) {
-        console.log("NOT FOUND 404");
         setNotFound(true);
       }
     })();
@@ -49,7 +48,7 @@ const Reservation = () => {
   return (
     <>
       <h1 className="reservation-title">{restaurantName}</h1>
-      <p>{date ? formatDate(date) : date}</p>
+      <p>{date && formatDate(date)}</p>
       <p>
         <strong>Party size: </strong>
         {partySize}

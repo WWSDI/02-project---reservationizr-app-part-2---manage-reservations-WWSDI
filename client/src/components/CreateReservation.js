@@ -56,17 +56,15 @@ const CreateReservation = () => {
 
   return (
     <>
-      {invalidKeys.includes("partySize") ? (
+      {invalidKeys.includes("partySize") && (
         <p
           style={{ color: "deepred", backgroundColor: "gold", padding: "1rem" }}
         >
-          ⛔️ You have entered a wrong <strong>Number of Guests</strong>.
-          Please make sure you enter a number between 1 and 30.
+          ⛔️ You have entered a wrong <strong>Number of Guests</strong>. Please
+          make sure you enter a number between 1 and 30.
         </p>
-      ) : (
-        <></>
       )}
-      {invalidKeys.includes("date") ? (
+      {invalidKeys.includes("date") && (
         <p
           style={{ color: "deepred", backgroundColor: "gold", padding: "1rem" }}
         >
@@ -74,8 +72,6 @@ const CreateReservation = () => {
           the date is at least <strong>one hour into the future</strong> from
           now.
         </p>
-      ) : (
-        <></>
       )}
       <h1>Reserve {restaurantName}</h1>
       <form onSubmit={handleSubmit}>

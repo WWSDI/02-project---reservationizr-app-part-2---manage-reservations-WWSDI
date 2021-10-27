@@ -48,7 +48,6 @@ const CreateReservation = () => {
         history.push("/reservations");
       } else if (response.status === 400) {
         const data = await response.json();
-        console.log("🌸", data);
         setInvalidKeys(data.validation.body.keys);
       }
     })();
@@ -56,12 +55,14 @@ const CreateReservation = () => {
 
   return (
     <>
+      {/* Display warning message for invalid input */}
       {invalidKeys.includes("partySize") && (
         <p
           style={{ color: "deepred", backgroundColor: "gold", padding: "1rem" }}
         >
           ⛔️ You have entered a wrong <strong>Number of Guests</strong>. Please
-          make sure you enter an <strong>integer</strong> number between <strong>1 and 30</strong>.
+          make sure you enter an <strong>integer</strong> number between{" "}
+          <strong>1 and 30</strong>.
         </p>
       )}
       {invalidKeys.includes("date") && (
@@ -69,10 +70,11 @@ const CreateReservation = () => {
           style={{ color: "deepred", backgroundColor: "gold", padding: "1rem" }}
         >
           ⛔️ You have entered a wrong <strong>Date</strong>. Please make sure
-          the date is at least <strong>one hour into the future</strong> from
-          now.
+          the reservation date is at least <strong>15 mins</strong> from now.
         </p>
       )}
+      
+      {/* Display create reservation form */}
       <h1>Reserve {restaurantName}</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="numGuest">Number of guests</label>

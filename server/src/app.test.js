@@ -256,7 +256,7 @@ describe("app", () => {
           expect(res.body).toEqual(expectedError);
         });
     });
-    test("should return 400 error when date is less than an hour from now", async () => {
+    test("should return 400 error when date is less than 15 mins from now", async () => {
       const badRequestBody = {
         partySize: 1,
         date: "2021-10-18T17:53:50.265Z",

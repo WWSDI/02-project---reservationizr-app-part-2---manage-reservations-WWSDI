@@ -76,10 +76,10 @@ app.post(
   jwtCheck,
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      partySize: Joi.number().min(1).max(30).required(),
+      partySize: Joi.number().integer().min(1).max(30).required(),
       date: Joi.date()
         // reservation datetime should at least be 1hr greater than current datetime
-        .greater(new Date(Date.now() + 1000 * 60 * 60))
+        .greater(new Date(Date.now() + 1000 * 60 * 15))
         .required(),
       restaurantName: Joi.string().min(2).max(50).required(),
     }),

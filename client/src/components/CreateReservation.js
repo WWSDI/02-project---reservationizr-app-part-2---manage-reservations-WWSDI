@@ -61,7 +61,7 @@ const CreateReservation = () => {
           style={{ color: "deepred", backgroundColor: "gold", padding: "1rem" }}
         >
           ⛔️ You have entered a wrong <strong>Number of Guests</strong>. Please
-          make sure you enter a number between 1 and 30.
+          make sure you enter an <strong>integer</strong> number between <strong>1 and 30</strong>.
         </p>
       )}
       {invalidKeys.includes("date") && (

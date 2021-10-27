@@ -11,7 +11,7 @@ const ReservationList = () => {
   useEffect(() => {
     (async () => {
       const accessToken = await getAccessTokenSilently();
-      const response = await fetch("http://localhost:5000/reservations", {
+      const response = await fetch("${process.env.REACT_APP_API_URL}/reservations", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

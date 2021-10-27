@@ -18,7 +18,7 @@ const CreateReservation = () => {
   const [invalidKeys, setInvalidKeys] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/restaurants/${restaurantId}`)
+    fetch(`${process.env.REACT_APP_API_URL}/restaurants/${restaurantId}`)
       .then((res) => res.json())
       .then((data) => {
         setRestaurantName(data.name);
@@ -36,7 +36,7 @@ const CreateReservation = () => {
 
     (async () => {
       const accessToken = await getAccessTokenSilently();
-      const response = await fetch("http://localhost:5000/reservations", {
+      const response = await fetch("${process.env.REACT_APP_API_URL}/reservations", {
         method: "post",
         headers: {
           "Content-Type": "application/json",

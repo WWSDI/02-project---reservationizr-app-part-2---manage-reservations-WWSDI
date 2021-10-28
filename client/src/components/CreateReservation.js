@@ -36,7 +36,7 @@ const CreateReservation = () => {
 
     (async () => {
       const accessToken = await getAccessTokenSilently();
-      const response = await fetch("${process.env.REACT_APP_API_URL}/reservations", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/reservations`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",

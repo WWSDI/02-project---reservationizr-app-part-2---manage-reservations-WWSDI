@@ -22,6 +22,12 @@ const jwtCheck = jwt({
 app.use(cors());
 app.use(express.json());
 
+// Health check path for Zero Downtime Deployment
+app.get("/", async (req, res) => {
+  console.log("reservationizr api is running")
+  res.status(200).send("reservationizr api is running");
+})
+
 app.get("/restaurants", async (req, res) => {
   const allRestaurants = await RestaurantModel.find({});
   res.status(200).send(allRestaurants);

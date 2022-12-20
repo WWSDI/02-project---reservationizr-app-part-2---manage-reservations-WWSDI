@@ -1,4 +1,4 @@
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
 const { connect } = require("mongoose");
 const app = require("./app");
 

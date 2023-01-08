@@ -12,10 +12,10 @@ const jwtCheck = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: "https://dev-2aqg2v5b.us.auth0.com/.well-known/jwks.json",
+    jwksUri: "https://dev--is7dl42.us.auth0.com/.well-known/jwks.json",
   }),
   audience: "https://www.reservationizr.com",
-  issuer: "https://dev-2aqg2v5b.us.auth0.com/",
+  issuer: "https://dev--is7dl42.us.auth0.com/",
   algorithms: ["RS256"],
 });
 

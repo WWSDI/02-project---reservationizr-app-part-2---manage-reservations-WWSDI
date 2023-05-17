@@ -4,17 +4,43 @@ import "./RestaurantList.css";
 
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
+  const [loadingState, setLoadingState] = useState("idle");
 
   useEffect(() => {
     (async () => {
-      console.log('😍', `${process.env.REACT_APP_API_URL}`);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/restaurants`);
+      console.log("😍", `${process.env.REACT_APP_API_URL}`);
+      setLoadingState("pending");
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/restaurants`
+      );
       const data = await response.json();
       setRestaurants(data);
+      setLoadingState("success");
     })();
   }, []);
 
-  return (
+  return loadingState === "pending" ? (
+    <div
+      className="warning"
+      style={{ textAlign: "left", margin: "auto", width: "20rem" }}
+    >
+      <div>
+        <div className="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <div style={{ fontSize: "large" }}>
+        <p>Loading data.</p>
+        <p>
+          It may take <strong>up to 40 seconds</strong> due to slow response of <em>Free
+          Tier Server</em>.
+        </p>
+      </div>
+    </div>
+  ) : (
     <>
       <h1>Restaurants</h1>
       {restaurants.map(({ id, image: imgURL, name, description }) => {

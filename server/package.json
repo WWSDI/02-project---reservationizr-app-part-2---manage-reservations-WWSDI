@@ -28,13 +28,18 @@
     "lodash": "^4.17.21",
     "mongodb-memory-server": "^7.4.1",
     "prettier": "^2.4.1",
+    "request": "^2.88.2",
     "serve": "^12.0.1",
     "start-server-and-test": "^1.14.0",
     "supertest": "^6.1.6"
   },
   "dependencies": {
+    "celebrate": "^15.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-jwt": "^6.1.0",
+    "jwks-rsa": "^2.0.5",
+    "mongoose": "^6.0.11",
     "nodemon": "^2.0.12"
   },
   "jest": {

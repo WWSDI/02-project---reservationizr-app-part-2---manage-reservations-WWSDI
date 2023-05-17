@@ -19,15 +19,21 @@ const App = () => {
       <Header />
       <div className="container">
         <Switch>
-          <Route path="/restaurants/:restaurantId/reserve">
-            <CreateReservation />
-          </Route>
-          <Route path="/reservations/:id">
-            <Reservation />
-          </Route>
-          <Route path="/reservations">
-            <ReservationList />
-          </Route>
+          <ProtectedRoute
+            path="/restaurants/:restaurantId/reserve"
+            component={CreateReservation}
+          ></ProtectedRoute>
+
+          <ProtectedRoute
+            path="/reservations/:id"
+            component={Reservation}
+          ></ProtectedRoute>
+
+          <ProtectedRoute
+            path="/reservations"
+            component={ReservationList}
+          ></ProtectedRoute>
+
           <Route path="/">
             <RestaurantList />
           </Route>
